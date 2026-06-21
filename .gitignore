@@ -1,3 +1,14 @@
+# Root-level documents & scripts (not part of the codebase)
+Cahier_des_Charges_Final.docx
+Cahier_des_Charges_Yool_Education.docx
+Fiche_Avancement_Stage.docx
+Modèle-Rapport de stage-25-26 Ingénieur.docx
+analyze_excel.js
+cahier_des_charges.md
+convert_to_word.py
+generate_report.py
+project_brief.md
+
 # Environments
 .env
 .env.*
