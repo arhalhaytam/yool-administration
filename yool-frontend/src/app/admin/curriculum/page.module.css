@@ -1,0 +1,384 @@
+/* ── Page shell ──────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pageAlert { margin-top: 4px; }
+
+/* ── Grid ─────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Panel ────────────────────────────────────────────────────── */
+.panel {
+  position: relative;
+  padding: 24px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color var(--t-smooth);
+  animation: fadeUp 0.45s var(--ease-out) both;
+  /* Hairline dot grid — subtle "computational" texture */
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.022) 1px,
+    transparent 0
+  );
+  background-size: 16px 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+.panel:hover {
+  border-color: var(--border-2);
+}
+
+/* ── Head row ─────────────────────────────────────────────────── */
+.panelHead {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.headIcon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-md);
+  background: linear-gradient(140deg, var(--surface-2) 0%, var(--surface-3) 100%);
+  border: 1px solid var(--border);
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.headText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.headTitle {
+  position: relative;
+  margin: 0;
+  padding-bottom: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--heading);
+  letter-spacing: -0.018em;
+}
+
+/* Hairline accent under the title — quiet but present */
+.headTitle::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  height: 1px;
+  width: 24px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    color-mix(in srgb, var(--accent) 0%, transparent) 100%
+  );
+  opacity: 0.85;
+}
+
+.headHint {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.45;
+}
+
+.countChip {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--text-2);
+  background: var(--surface-2);
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+/* ── Add form ─────────────────────────────────────────────────── */
+.addForm {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.addInput {
+  flex: 1;
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+/* ── List ─────────────────────────────────────────────────────── */
+.itemList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.itemRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 13.5px;
+  color: var(--text);
+  transition: background-color var(--t-smooth), border-color var(--t-smooth);
+}
+
+/* Animated accent rail at the inset-inline-start edge */
+.itemRow::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  inset-inline-start: 4px;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transform-origin: center;
+  transition: opacity var(--t-smooth), transform var(--t-smooth);
+  pointer-events: none;
+}
+
+.itemRow:hover,
+.itemRow:focus-within {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+.itemRow:hover::before,
+.itemRow:focus-within::before {
+  opacity: 0.55;
+  transform: scaleY(1);
+}
+
+/* ── Leading row mark — pure-CSS terminal-style chevron ──────── */
+.itemMark {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 14px;
+  -webkit-user-select: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Classic CSS chevron: a small square with two borders, rotated 45°. */
+.itemMark::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-top:   1.5px solid var(--muted);
+  border-right: 1.5px solid var(--muted);
+  transform: translateX(-1px) rotate(45deg);
+  transition: border-color var(--t-smooth), transform var(--t-smooth);
+}
+
+.itemRow:hover .itemMark::before,
+.itemRow:focus-within .itemMark::before {
+  border-top-color:   var(--accent);
+  border-right-color: var(--accent);
+  transform: translateX(2px) rotate(45deg);
+}
+
+.itemName {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.005em;
+  color: var(--heading-section);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  transition: color var(--t-smooth), transform var(--t-smooth);
+}
+.itemRow:hover .itemName,
+.itemRow:focus-within .itemName {
+  color: var(--heading);
+}
+
+/* ── Item actions (hover-reveal) ──────────────────────────────── */
+.itemActions {
+  display: inline-flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--t-smooth);
+}
+.itemRow:hover .itemActions,
+.itemRow:focus-within .itemActions {
+  opacity: 1;
+}
+
+.iconBtn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background-color var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.iconBtn:hover {
+  background: var(--surface-3);
+  border-color: var(--border);
+  color: var(--text);
+}
+.iconBtn:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow, color-mix(in srgb, var(--accent) 25%, transparent));
+}
+.iconBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.iconBtnDanger:hover {
+  color: var(--danger, #ef4444);
+  background: color-mix(in srgb, var(--danger, #ef4444) 10%, transparent);
+  border-color: color-mix(in srgb, var(--danger, #ef4444) 30%, transparent);
+}
+.iconBtnConfirm:hover {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* ── Editing mode ─────────────────────────────────────────────── */
+.itemEditing {
+  background: var(--surface-2);
+  border-color: var(--border);
+  padding: 8px 12px;
+}
+
+.editFieldWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  grid-column: 2 / span 2;
+  min-width: 0;
+}
+
+.editInput {
+  flex: 1;
+  height: 30px;
+  padding: 0 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font: inherit;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  min-width: 0;
+}
+.editInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow, color-mix(in srgb, var(--accent) 25%, transparent));
+}
+
+/* ── In-list empty state ──────────────────────────────────────── */
+.emptyNotice {
+  position: relative;
+  padding: 14px 14px 14px 36px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  text-align: start;
+  border: 1px dashed var(--border);
+  border-radius: var(--r-md);
+  background: transparent;
+  font-family: var(--font-mono);
+  letter-spacing: 0.005em;
+}
+
+/* Terminal-style "//" prefix */
+.emptyNotice::before {
+  content: '//';
+  position: absolute;
+  inset-inline-start: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  opacity: 0.7;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────── */
+.skeletonItem {
+  height: 14px;
+  border-radius: var(--r-sm);
+  display: inline-block;
+  width: 60%;
+  grid-column: 2;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .panel { padding: 18px; }
+  .panelHead { grid-template-columns: 36px 1fr; row-gap: 8px; }
+  .headIcon { width: 36px; height: 36px; }
+  .countChip { grid-column: 1 / -1; justify-self: start; }
+  .headTitle { font-size: 15px; }
+  .headHint  { font-size: 12px; }
+  .itemRow   { grid-template-columns: 16px 1fr auto; padding: 9px 10px; }
+  .itemActions { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .panel { padding: 16px; }
+  .itemRow { font-size: 13px; padding: 8px 8px; gap: 8px; }
+  .addForm { flex-direction: column; }
+  .addBtn  { justify-content: center; }
+}

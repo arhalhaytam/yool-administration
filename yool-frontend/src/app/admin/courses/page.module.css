@@ -1,0 +1,546 @@
+/* ── Page shell ──────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pageAlert { margin-top: 4px; }
+
+/* ── Filter toolbar ──────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  /* Hairline dot grid: tiny "computational" texture */
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.018) 1px,
+    transparent 0
+  );
+  background-size: 16px 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1 1 240px;
+  min-width: 200px;
+}
+
+/* Accent rail on focus — subtle "live" indicator on the search field */
+.searchWrap::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  inset-inline-start: 0;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transform-origin: center;
+  transition: opacity var(--t-smooth), transform var(--t-smooth);
+  pointer-events: none;
+  z-index: 2;
+}
+.searchWrap:focus-within::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.searchIcon {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-2);
+  pointer-events: none;
+  z-index: 1;
+  transition: color var(--t-fast);
+}
+.searchWrap:focus-within .searchIcon { color: var(--accent); }
+
+/* Bump the input's text away from the leading icon */
+.searchInput {
+  padding-inline-start: 32px !important;
+}
+
+.toolbarSelect {
+  flex: 0 1 auto;
+  min-width: 150px;
+}
+
+.resetBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.resetBtn:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border-2);
+}
+.resetBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.activeFilterPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px 4px 10px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  margin-inline-start: auto;
+}
+
+/* Live pulsing dot — signals "something is filtering right now" */
+.activeFilterPill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  animation: filterPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes filterPulse {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(0.85);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+}
+
+/* ── Grid ────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.gridLoading {
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeSlide 0.4s var(--ease-out) both;
+  transition:
+    border-color var(--t-smooth),
+    background-color var(--t-smooth),
+    transform var(--t-smooth),
+    box-shadow var(--t-smooth);
+  overflow: hidden;
+  /* Hairline dot grid */
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.022) 1px,
+    transparent 0
+  );
+  background-size: 16px 16px;
+  background-position: 0 0;
+}
+
+/* Hover accent rail on the inset-inline-start edge */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  inset-inline-start: 0;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 999px;
+  opacity: 0;
+  transform: scaleY(0.4);
+  transform-origin: center;
+  transition: opacity var(--t-smooth), transform var(--t-smooth);
+}
+.card:hover::before,
+.card:focus-within::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.card:hover {
+  border-color: var(--border-2);
+  background-color: var(--surface-2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Card head: chip + level eyebrow + lang pill + delete slot ── */
+.cardHead {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.cardChip {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  flex-shrink: 0;
+  transition: background-color var(--t-smooth), border-color var(--t-smooth), color var(--t-smooth);
+}
+.card:hover .cardChip {
+  background: var(--surface-3);
+  border-color: var(--border-2);
+  color: var(--accent);
+}
+
+.cardEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Tiny accent dash prefix — terminal-style label */
+.cardEyebrow::before {
+  content: '';
+  flex-shrink: 0;
+  display: inline-block;
+  width: 8px;
+  height: 1.5px;
+  background: var(--accent);
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+/* The eyebrow text — clip with ellipsis but keep the dash visible */
+.cardEyebrowText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.langPill {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+  background: var(--surface-2);
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+.card:hover .langPill {
+  color: var(--text);
+  border-color: var(--border-2);
+}
+
+/* ── Card subject (the title) ────────────────────────────────── */
+.cardSubject {
+  position: relative;
+  margin: 0;
+  padding-bottom: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: var(--heading);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Animated hairline underline beneath the title — grows on card hover */
+.cardSubject::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  height: 1px;
+  width: 32px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    color-mix(in srgb, var(--accent) 0%, transparent) 100%
+  );
+  transform-origin: inset-inline-start center;
+  transition: width var(--t-smooth);
+}
+.card:hover .cardSubject::after,
+.card:focus-within .cardSubject::after {
+  width: 72px;
+}
+
+/* ── Meta rows ───────────────────────────────────────────────── */
+.metaRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+  min-width: 0;
+}
+
+.metaIcon {
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: color var(--t-fast);
+}
+.card:hover .metaIcon { color: var(--text-2); }
+
+.metaTeacher {
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.metaValue {
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum', 'lnum';
+}
+
+/* Subtle label-style suffix in mono — picks up the "techy" feel */
+.metaValue em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--text-2);
+  margin-inline-start: 4px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.teacherInitials {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(140deg, var(--surface-2) 0%, var(--surface-3) 100%);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.cardDate {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.viewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--accent);
+  transition: color var(--t-fast);
+}
+.viewLink svg {
+  transition: transform var(--t-smooth);
+}
+.viewLink:hover {
+  color: var(--accent-h);
+}
+.viewLink:hover svg {
+  transform: translateX(4px);
+}
+
+:global([dir='rtl']) .viewLink:hover svg {
+  transform: translateX(-4px);
+}
+
+.arrowRtl {
+  display: inline-flex;
+  transform: rotate(180deg);
+}
+
+/* ── Delete button (sits inline in the card head, opacity-reveal) ── */
+.deleteBtn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-2);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-fast), color var(--t-fast), background-color var(--t-fast), border-color var(--t-fast);
+}
+.card:hover .deleteBtn,
+.card:focus-within .deleteBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+.deleteBtn:hover {
+  color: var(--danger, #ef4444);
+  background: color-mix(in srgb, var(--danger, #ef4444) 12%, transparent);
+  border-color: color-mix(in srgb, var(--danger, #ef4444) 35%, transparent);
+}
+.deleteBtn:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-glow, color-mix(in srgb, var(--accent) 25%, transparent));
+}
+
+/* ── Empty state wrapper ─────────────────────────────────────── */
+.emptyWrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* ── Skeleton ────────────────────────────────────────────────── */
+.cardSkeleton {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeSlide 0.25s ease both;
+}
+.sk1 { width: 28%; height: 10px; }
+.sk2 { width: 72%; height: 16px; }
+.sk3 { width: 40%; height: 10px; }
+.sk4 { width: 100%; height: 40px; margin-top: 8px; }
+
+/* ── Modal ───────────────────────────────────────────────────── */
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .grid    { gap: 16px; }
+}
+
+@media (max-width: 720px) {
+  .grid    { grid-template-columns: 1fr; gap: 14px; }
+  .card    { padding: 18px; gap: 12px; }
+  .cardSubject { font-size: 17px; }
+  .toolbar { padding: 10px; }
+  .toolbarSelect { flex: 1 1 calc(50% - 5px); min-width: 0; }
+  .deleteBtn { opacity: 1; }
+  .activeFilterPill { margin-inline-start: 0; }
+}
+
+@media (max-width: 480px) {
+  .card    { padding: 16px; }
+  .toolbarSelect { flex: 1 1 100%; }
+  .resetBtn { width: 100%; justify-content: center; }
+}

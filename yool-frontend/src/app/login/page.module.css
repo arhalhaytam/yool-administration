@@ -1,0 +1,102 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 40px 42px 34px;
+  position: relative;
+  animation: fadeUp 0.32s var(--ease-out) both;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.02) inset,
+    0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Brand — wordmark + accent period. The mark sits subtly above. */
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.brandMark { color: var(--accent); display: inline-flex; }
+.brandWord {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--heading);
+  letter-spacing: -0.035em;
+  font-family: var(--font-sans);
+  line-height: 1;
+}
+.brandPeriod { color: var(--accent); }
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--heading);
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 14px;
+  color: var(--text-2);
+  margin-bottom: 26px;
+  line-height: 1.55;
+}
+
+.form { display: flex; flex-direction: column; gap: 12px; }
+.formAlert { margin-top: 4px; }
+
+.loginInput {
+  border-color: color-mix(in srgb, var(--border-2) 82%, transparent);
+}
+.loginInput:focus {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--text) 4%, transparent);
+}
+
+.forgot { text-align: end; margin-top: 2px; margin-bottom: 8px; }
+.forgot a {
+  font-size: 12px;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: color var(--t-fast);
+}
+.forgot a:hover { color: var(--accent); }
+
+.loginButton {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 3px 10px color-mix(in srgb, var(--accent) 30%, transparent) !important;
+}
+.loginButton:hover:not(:disabled) {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.22),
+    0 6px 14px color-mix(in srgb, var(--accent) 34%, transparent) !important;
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .page    { padding: 16px; }
+  .card    { padding: 32px 24px 26px; border-radius: var(--r-lg); }
+  .title   { font-size: 20px; }
+  .subtitle{ margin-bottom: 22px; }
+  .brand   { margin-bottom: 24px; gap: 8px; }
+}

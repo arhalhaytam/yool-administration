@@ -1,0 +1,130 @@
+/**
+ * Global motion layer — transitions only (no spacing/layout changes).
+ * Uses design tokens from globals.css for symmetric timing across the app.
+ */
+
+/* ─── Shared action timing ─────────────────────────────────────────── */
+:root {
+  --t-action: var(--t-smooth);
+  --t-action-fast: var(--t-fast);
+}
+
+/* ─── Interactive primitives (fallback where modules omit rules) ─── */
+button:not(:disabled),
+[type='button']:not(:disabled),
+[type='submit']:not(:disabled),
+[type='reset']:not(:disabled),
+[role='button']:not([aria-disabled='true']) {
+  transition:
+    color var(--t-action),
+    background-color var(--t-action),
+    background var(--t-action),
+    border-color var(--t-action),
+    box-shadow var(--t-action),
+    opacity var(--t-action-fast),
+    transform var(--t-action-fast);
+}
+
+a:not([class*='btn']) {
+  transition:
+    color var(--t-action),
+    opacity var(--t-action),
+    transform var(--t-action-fast);
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='range']),
+textarea,
+select {
+  transition:
+    color var(--t-action),
+    background-color var(--t-action),
+    border-color var(--t-action),
+    box-shadow var(--t-action),
+    opacity var(--t-action-fast);
+}
+
+/* ─── Button press feedback ────────────────────────────────────────── */
+button:not(:disabled):active,
+[type='button']:not(:disabled):active,
+[type='submit']:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* ─── Tables ───────────────────────────────────────────────────────── */
+table tbody tr,
+tbody tr[class*='row'] {
+  transition: background-color var(--t-action);
+}
+
+/* ─── Cards & panels (hover states only — no size changes) ───────── */
+.panel,
+[class*='statCard'],
+article[class*='card']:not([class*='skeleton']) {
+  transition:
+    border-color var(--t-action),
+    box-shadow var(--t-action),
+    background-color var(--t-action),
+    transform var(--t-action);
+}
+
+/* ─── Alerts & feedback ────────────────────────────────────────────── */
+[role='alert'],
+[role='status'] {
+  transition:
+    opacity var(--t-action),
+    border-color var(--t-action),
+    background-color var(--t-action);
+}
+
+/* ─── Sidebar active indicator ─────────────────────────────────────── */
+[class*='activeLine'] {
+  transition: opacity var(--t-action), transform var(--t-action);
+}
+
+/* ─── Symmetric page enter (matches ui-page) ─────────────────────── */
+.ui-page {
+  animation: uiPageIn var(--t-enter) var(--ease-out) both;
+}
+
+@keyframes uiContentIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Reduced motion ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ui-page,
+  .ui-overlay,
+  .ui-modal,
+  .ui-pill,
+  .ui-chip,
+  .ui-tab,
+  .ui-icon-btn,
+  .ui-action-btn,
+  .ui-btn-filter,
+  .ui-control,
+  .ui-search,
+  .ui-surface-interactive,
+  .btn {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ui-pill:hover,
+  .ui-chip:hover,
+  .ui-icon-btn:hover,
+  .ui-action-btn:hover,
+  .ui-btn-filter--primary:hover,
+  .ui-surface-interactive:hover,
+  .btn:hover:not(:disabled),
+  article[class*='card']:hover,
+  [class*='statCard']:hover {
+    transform: none !important;
+  }
+}

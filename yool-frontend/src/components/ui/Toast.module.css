@@ -1,0 +1,167 @@
+.container {
+  position: fixed;
+  top: max(24px, env(safe-area-inset-top, 24px));
+  inset-inline-end: max(24px, env(safe-area-inset-right, 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+  width: calc(100% - 48px);
+  max-width: 360px;
+  pointer-events: none;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(13, 21, 38, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text);
+  box-shadow:
+    var(--shadow-lg),
+    0 4px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  animation: slideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform var(--t-fast), opacity var(--t-fast);
+}
+
+.toast:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-2);
+}
+
+.toast:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 4px;
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: color var(--t-fast), background-color var(--t-fast);
+}
+.closeBtn:hover {
+  background: var(--surface-2);
+}
+
+.toast:hover .closeBtn {
+  color: var(--text-2);
+}
+
+/* Toast types visual variants */
+.success {
+  border-inline-start: 3px solid var(--success);
+}
+.success .icon {
+  background: var(--success-dim);
+  color: var(--success);
+}
+
+.error {
+  border-inline-start: 3px solid var(--danger);
+}
+.error .icon {
+  background: var(--danger-dim);
+  color: var(--danger);
+}
+
+.warning {
+  border-inline-start: 3px solid var(--warning);
+}
+.warning .icon {
+  background: var(--warning-dim);
+  color: var(--warning);
+}
+
+.info {
+  border-inline-start: 3px solid var(--accent);
+}
+.info .icon {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+/* Timing progress bar at the bottom */
+.progress {
+  position: absolute;
+  bottom: 0;
+  inset-inline-start: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, currentColor);
+  opacity: 0.15;
+  width: 100%;
+  /* Duration set per-instance via inline CSS custom property --toast-duration */
+  animation: shrink var(--toast-duration, 4000ms) linear forwards;
+}
+
+:global([dir='rtl']) .toast {
+  animation-name: slideInRtl;
+}
+
+@keyframes slideInRtl {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.success .progress { color: var(--success); }
+.error .progress { color: var(--danger); }
+.warning .progress { color: var(--warning); }
+.info .progress { color: var(--accent); }
+
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}

@@ -1,0 +1,403 @@
+/* ═══════════════════════════════════════════════════════════════
+   Settings — single-column refined layout.
+   No gradients, no rotation shines, no neon glows.
+   ═══════════════════════════════════════════════════════════════ */
+
+.page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pageAlert {
+  margin-bottom: 4px;
+}
+
+/* ─── Identity card (hero) ────────────────────────────────────── */
+.identityCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  animation: fadeUp 0.4s var(--ease-out) both;
+}
+
+.identityAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.identityBody {
+  flex: 1;
+  min-width: 0;
+}
+.identityName {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--heading);
+  margin-bottom: 6px;
+}
+.identityMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.identityMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.roleBadgeIcon {
+  margin-inline-end: 4px;
+  vertical-align: -1px;
+}
+
+/* ─── Section card ────────────────────────────────────────────── */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 22px 24px 24px;
+  animation: fadeUp 0.4s var(--ease-out) both;
+}
+.section:nth-of-type(2) { animation-delay:  40ms; }
+.section:nth-of-type(3) { animation-delay:  80ms; }
+.section:nth-of-type(4) { animation-delay: 120ms; }
+.section:nth-of-type(5) { animation-delay: 160ms; }
+.section:nth-of-type(6) { animation-delay: 200ms; }
+
+/* Header row: icon + title + subtitle */
+.sectionHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sectionHeadIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sectionHeadIconDanger {
+  background: var(--danger-dim);
+  border-color: color-mix(in srgb, var(--danger) 28%, transparent);
+  color: var(--danger);
+}
+
+.sectionTitle {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--heading-section);
+  margin: 0 0 2px;
+  line-height: 1.3;
+}
+.sectionTitleDanger {
+  color: var(--danger);
+}
+.sectionSubtitle {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ─── Forms ──────────────────────────────────────────────────── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 440px;
+}
+.formActions {
+  padding-top: 4px;
+}
+
+/* ─── Language selector ──────────────────────────────────────── */
+.langList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 440px;
+}
+
+.langItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  width: 100%;
+  text-align: start;
+  transition:
+    background-color var(--t-smooth),
+    border-color var(--t-smooth);
+}
+.langItem:hover {
+  background: var(--surface-3);
+  border-color: var(--border-2);
+}
+.langItem:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.langItemActive {
+  background: var(--accent-dim);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.langItemBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.langNative {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.langItemActive .langNative { color: var(--accent); }
+.langLatin {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.langCheck {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+:global([dir='rtl']) .langItem {
+  flex-direction: row-reverse;
+}
+
+/* ─── Device sessions ────────────────────────────────────────── */
+.deviceList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.deviceRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  transition:
+    border-color var(--t-fast),
+    background-color var(--t-fast);
+}
+.deviceRow:hover {
+  border-color: var(--border-2);
+  background: var(--surface-3);
+}
+
+.deviceIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  flex-shrink: 0;
+}
+
+.deviceInfo {
+  flex: 1;
+  min-width: 0;
+}
+.deviceName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.deviceMeta {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+.deviceMetaDot {
+  margin: 0 6px;
+  opacity: 0.6;
+}
+
+.revokeBtn {
+  background: none;
+  border: 1px solid var(--border-2);
+  color: var(--muted);
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    border-color var(--t-fast),
+    color var(--t-fast),
+    background-color var(--t-fast);
+}
+.revokeBtn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-dim);
+}
+.revokeBtn:focus-visible {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
+}
+
+.sessionsNote {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 8px 0;
+}
+
+/* Skeletons */
+.deviceSkeletonIcon {
+  width: 34px; height: 34px;
+  border-radius: var(--r-md);
+  flex-shrink: 0;
+  display: inline-block;
+}
+.deviceSkeletonName {
+  width: 60%; height: 12px;
+  border-radius: var(--r-sm);
+  display: block;
+  margin-bottom: 6px;
+}
+.deviceSkeletonMeta {
+  width: 40%; height: 10px;
+  border-radius: var(--r-sm);
+  display: block;
+}
+
+/* Show all toggle */
+.showAllBtn {
+  margin-top: 4px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: color var(--t-fast), background-color var(--t-fast);
+}
+.showAllBtn:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+.showAllChevron {
+  transition: transform var(--t-smooth);
+}
+.showAllChevronOpen {
+  transform: rotate(180deg);
+}
+
+
+/* ─── Danger zone ────────────────────────────────────────────── */
+.sectionDanger {
+  border-color: color-mix(in srgb, var(--danger) 28%, var(--border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--danger) 4%, transparent), transparent 35%),
+    var(--surface);
+}
+
+.confirmRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.confirmLabel {
+  font-size: 13px;
+  color: var(--danger);
+  font-weight: 500;
+  margin-inline-end: 4px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .identityCard {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 18px 18px;
+  }
+  .section      { padding: 20px 18px; }
+  .sectionHead  { margin-bottom: 14px; }
+  .form         { max-width: none; }
+  .langList     { max-width: none; }
+}
+@media (max-width: 480px) {
+  .page          { gap: 16px; }
+  .identityCard  { padding: 16px; gap: 12px; }
+  .identityAvatar { width: 48px; height: 48px; font-size: 16px; }
+  .identityName  { font-size: 17px; }
+  .section       { padding: 18px 16px; border-radius: var(--r-lg); }
+  .sectionTitle  { font-size: 14px; }
+  .deviceRow     { padding: 12px 14px; gap: 10px; }
+  .langItem      { padding: 12px 14px; }
+}
+
+/* fadeUp keyframe lives in globals.css */

@@ -1,0 +1,47 @@
+# Environment — NEVER commit real secrets
+.env
+.env.local
+.env.production
+*.env
+
+# Secrets — NEVER commit these
+secrets/
+*.pem
+nginx/certs/*.crt
+nginx/certs/*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+frontend/.env.local
+
+# Docker volumes (local dev)
+postgres_data/
+redis_data/
+
+# Model cache
+.cache/
+*.bin
+*.safetensors
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

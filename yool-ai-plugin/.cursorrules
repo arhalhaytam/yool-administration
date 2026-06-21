@@ -1,0 +1,362 @@
+# Yool AI Plugin — Cursor Rules
+# This file is automatically injected into every Composer session.
+# Read it fully before writing any code.
+
+## Project Overview
+
+**Name**: Yool AI Plugin — Enterprise Lecture Reference Framework  
+**Type**: Production-grade SaaS microservices platform  
+**Goal**: A passive recording and content-tracking tool that lets an institution see, for every lecture delivered, exactly which topics the professor covered and when — with near-zero effort from the professor.  
+**Deployment**: Docker Compose, self-hosted, HTTPS via nginx.
+
+### One-line pitch
+The admin creates courses and assigns teachers. The teacher opens the app, taps Start, teaches, taps Stop. The system transcribes the audio and generates a structured topic outline. The admin can then browse and search across all sessions to audit what was covered.
+
+---
+
+## Architecture
+
+```
+Client (HTTPS)
+    │
+    ▼
+nginx (reverse proxy, TLS termination, rate limiting, structured JSON logs)
+    │
+    ├──► auth    (port 8001) — authentication, RBAC, teacher/admin management
+    ├──► session (port 8002) — courses, live sessions (admin creates, teacher records)
+    ├──► stt     (port 8003) — speech-to-text WebSocket stream + topic outline generation
+    └──► query   (port 8004) — semantic search across topic outlines and transcripts
+    
+Infrastructure:
+    PostgreSQL  — shared relational DB (all services share one DB via shared/models/)
+    Redis       — JWT blocklist + sliding window rate limiting
+```
+
+---
+
+## User Roles & Flows
+
+### Roles (3 total — NO students)
+
+```
+SUPER_ADMIN  → full system access, can create any role
+ADMIN        → manage users, create courses, assign teachers, review topic outlines
+TEACHER      → picks a course, taps Start, teaches, taps Stop. That's it.
+```
+
+**There are NO student accounts. The platform is purely enterprise-internal.**
+
+### Teacher UX (3 taps, total)
+
+1. Open the app → see "your courses today"
+2. Pick a course
+3. Tap **Start lecture**
+
+The session auto-titles itself (e.g. "Cours: Algorithmes — 30/04/2026 10:00"), records audio, transcribes in real time. The teacher taps **Stop** when done — there is no automatic stop, no silence detection, and no max-duration cap.
+
+### Admin UX
+
+- Creates courses, assigns each course to a teacher
+- Reviews structured topic outlines for every recorded session
+- Searches across all sessions ("in which lecture did Prof. X cover dynamic programming?")
+
+### What the institution gets back
+
+For every recorded lecture, a structured topic outline:
+
+```json
+{
+  "teacher": "Prof. Benmoussa",
+  "course": "Algorithmes et Structures de Données",
+  "date": "2026-04-30",
+  "topics": [
+    {
+      "start_time": "00:00:00",
+      "end_time":   "00:18:30",
+      "title":      "Introduction et rappels sur la récursion",
+      "description":"Le professeur a rappelé la définition de la récursion et présenté deux exemples : factorielle et Fibonacci.",
+      "key_concepts": ["récursion", "factorielle", "Fibonacci", "cas de base"]
+    },
+    {
+      "start_time": "00:18:30",
+      "end_time":   "00:42:00",
+      "title":      "Complexité et débordement de pile",
+      "description":"Discussion sur la complexité O(2^n) de la version naïve de Fibonacci et le risque de stack overflow.",
+      "key_concepts": ["complexité", "stack overflow", "mémoïsation"]
+    }
+  ],
+  "language": "fr",
+  "duration_minutes": 75
+}
+```
+
+---
+
+## What was removed (old → new)
+
+| Removed | Replaced by |
+|---------|-------------|
+| Student accounts and enrollment | Nothing — institution is the audience |
+| Class-link invites, student registration | Nothing |
+| Student-style summaries (key_points, quiz, glossary, qa_pairs) | Chronological topic outline with timestamps |
+| Per-session consent dialog | Institutional consent recorded once at org level |
+| Teacher creates own courses | Admin creates and assigns courses |
+| Manual session create + title + start + end | Single Start tap; auto-title; manual Stop |
+| PartialSummary (live catch-up for students) | Nothing |
+| Enrollment model | Deleted |
+| CourseInvite model | Deleted |
+
+---
+
+## Tech Stack (non-negotiable, do not deviate)
+
+- **Framework**: FastAPI (async only — every DB/Redis call must be awaited)
+- **ORM**: SQLAlchemy 2.x async (`AsyncSession`, `select()`, not `session.query()`)
+- **Validation**: Pydantic v2 (`model_config`, `field_validator`, `Field(...)` constraints)
+- **Migrations**: Alembic — sequential numbered files: `001_...`, `002_...` (currently at `007`, next is `008`)
+- **Logging**: `structlog` — structured key=value, never `print()` or `logging.basicConfig()`
+- **Auth**: RS256 JWTs (asymmetric — private key in auth only, public key shareable)
+- **Passwords**: bcrypt via `core.security.hash_password()` — never roll your own
+- **Redis client**: `redis.asyncio` (aioredis pattern)
+- **Styling**: Python 3.11+, type-annotated throughout (`Annotated[X, Depends()]`)
+
+---
+
+## Service Status
+
+| Service | Status | Tests |
+|---------|--------|-------|
+| `auth` | Done — student/invite endpoints removed; teacher invite + admin user-mgmt only | Tested |
+| `session` | Done — admin-creates-course-with-teacher; single-call start; manual stop | Tested |
+| `stt` | Done — chronological topic outline; metadata injected from DB; live partials gone | Pipeline updated |
+| `query` | Done — teacher (owner) + admin only; no enrollment branches | Updated |
+
+---
+
+## Shared Models (post-pivot)
+
+```
+shared/
+  models/
+    user.py         — User, UserRole (SUPER_ADMIN, ADMIN, TEACHER — no STUDENT)
+    course.py       — Course (admin-created, assigned to teacher)
+    session.py      — Session (auto-titled, teacher just taps Start/Stop)
+    transcript.py   — Transcript segments with timestamps
+    summary.py      — Summary (structured topic outline in JSONB)
+    audit.py        — AuditLog, RefreshToken
+    auth_tokens.py  — EmailVerificationToken, PasswordResetToken
+    teacher_invite.py — TeacherInvite (admin invites teachers/admins)
+  database.py       — get_session() async dependency
+```
+
+**DELETED models (do not reference or import):**
+- `Enrollment` — removed, no students
+- `CourseInvite` — removed, no class links
+- `PartialSummary` — removed, no live catch-up
+
+Import from `shared.models` not from individual service models.
+
+---
+
+## Established Patterns (follow these in every new service)
+
+### 1. Email handling
+Always normalize to lowercase before storage or lookup:
+```python
+user.email = body.email.lower()
+db.execute(select(User).where(User.email == body.email.lower()))
+```
+
+### 2. Token handling
+Never store raw tokens. Always SHA-256 hash:
+```python
+from core.utils import hash_token
+stored = hash_token(raw_token)
+```
+
+### 3. Rate limiting
+Use the existing sliding window (NOT fixed window):
+```python
+from core.rate_limit import _sliding_window
+await _sliding_window(key=f"rate:myaction:{ip}", max_requests=5, window_seconds=900, message="...")
+```
+
+### 4. Audit logging
+Every admin or sensitive action MUST be logged:
+```python
+from core.utils import write_audit_log
+write_audit_log(db, actor_id, "resource.action", "resource_type", str(target_id), request)
+```
+
+### 5. Password validation
+Use the shared validator — do not re-implement:
+```python
+from core.utils import validate_password
+validate_password(body.password)  # raises HTTPException 422 on failure
+```
+
+### 6. Pydantic schemas
+Always include constraints — never bare `str`:
+```python
+full_name: str = Field(min_length=2, max_length=255, strip_whitespace=True)
+password:  str = Field(min_length=8, max_length=128)
+email:     EmailStr  # Pydantic normalizes format, app normalizes case
+```
+
+### 7. Error handling
+- Concurrent duplicate → catch `IntegrityError` → return 409 (not 500)
+- Deactivated/deleted user → 401 (not 403)
+- Resource not found → 404
+- Permission denied → 403
+- Validation failure → 422 (let Pydantic handle, or HTTPException(422, ...))
+- Rate limited → 429
+
+### 8. DB queries
+Always filter soft-deleted users:
+```python
+select(User).where(User.is_active == True, User.is_deleted == False)
+```
+
+### 9. Migrations
+- Sequential numbered: next is `008_description.py`
+- Always include both `upgrade()` and `downgrade()`
+- Reference existing enum with `create_type=False`
+- Post-pivot, the `user_role` enum has 3 values: `super_admin`, `admin`, `teacher`
+
+### 10. Routers
+```python
+router = APIRouter(redirect_slashes=False)  # critical — prevents 307 redirect bugs
+```
+
+### 11. Session auto-title format
+Sessions are auto-titled from course name + date:
+```python
+title = f"Cours: {course.title} — {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+```
+Teachers do NOT manually enter session titles.
+
+---
+
+## Security Non-Negotiables
+
+1. **Timing attacks**: never short-circuit before hashing (use constant-time ops)
+2. **No raw tokens in DB**: always hash (SHA-256 minimum)
+3. **No secrets in logs**: truncate emails, never log passwords or tokens
+4. **Session cap**: max 10 concurrent refresh tokens per user (FIFO eviction)
+5. **GDPR**: soft-delete only — anonymize in place, never hard-delete user rows
+6. **RBAC**: every non-public endpoint must have `Depends(require_role(...))` or `Depends(get_current_user)`
+7. **Input limits**: all string fields must have `max_length` to prevent DoS
+8. **Consent**: institutional consent at org level, NOT per-session
+
+---
+
+## Known Anti-Patterns (never repeat these)
+
+| Anti-pattern | Correct approach |
+|---|---|
+| `expires_in: int = 900` hardcoded | `expires_in: int = settings.JWT_ACCESS_EXPIRE_MINUTES * 60` |
+| `get_redis()` defined locally in each file | Import from `core/redis.py` shared singleton |
+| `hash_token()` re-implemented locally | Import from `core/utils.hash_token` |
+| Admin endpoints mixed into the main auth router | Admin operations belong in `routers/admin.py` |
+| `send_email()` called before `await db.commit()` | Commit first, then send |
+| Hard-delete (`DELETE` that removes the DB row) | Soft-delete: `is_deleted=True`, `deleted_at=now()` |
+| No audit log on sensitive admin mutation | Every mutation → `write_audit_log()` |
+| No rate limit on public-facing token endpoints | Add `_sliding_window()` rate limit |
+| `SELECT` without `FOR UPDATE` on counters | Use `with_for_update()` for counter fields |
+| Sibling router imports (`from routers.auth import ...`) | Shared utilities go in `core/`, not routers |
+| Referencing `STUDENT` role or `Enrollment` model | These no longer exist — the platform has no students |
+| Teacher creates their own courses | Admins create courses and assign teachers |
+| Manual session title entry | Auto-title from course name + timestamp |
+
+---
+
+## Pre-Implementation Checklist (run this before writing any code)
+
+Before starting ANY new feature or endpoint, answer every question below.
+
+**Data integrity**
+- [ ] Does a `UNIQUE` constraint exist at the DB level for any field that must be unique?
+- [ ] For counter increments, is there a `SELECT FOR UPDATE` to prevent race conditions?
+- [ ] Will `IntegrityError` be caught and returned as 409, not as a 500?
+
+**Security**
+- [ ] Is every endpoint gated by `Depends(require_role(...))` or `Depends(get_current_user)`?
+- [ ] If the endpoint accepts a token, is it hashed before DB lookup?
+- [ ] Is there rate limiting on any endpoint that can be abused?
+- [ ] Are all string inputs bounded with `max_length`?
+
+**Audit trail**
+- [ ] Does every admin action, sensitive mutation, or security event call `write_audit_log()`?
+- [ ] Is audit logging inside the same DB transaction as the mutation?
+
+**Delete operations**
+- [ ] Is any "delete" actually a HARD delete? Default is soft-delete.
+
+**External side-effects**
+- [ ] Are emails / external calls made AFTER a successful DB commit?
+
+**Redis**
+- [ ] Is the Redis connection from `core/redis.py` singleton, not a new local pool?
+
+**Test coverage**
+- [ ] Does every happy path have a test?
+- [ ] Does every unhappy path (401, 403, 404, 409, 422, 429) have a test?
+
+---
+
+## Plan Review Checklist
+
+When Cursor or any agent proposes a plan, check it against this list:
+
+1. **No student references** — does the plan reference students, enrollment, class links, or CourseInvite? If yes, reject.
+2. **Admin-assigned courses** — does the plan let teachers create their own courses? If yes, reject. Admins create and assign.
+3. **Auto-title sessions** — does the plan ask teachers to enter a session title? If yes, reject. Auto-title from course + date.
+4. **Topic outline schema** — does the AI output use the new chronological topic outline format (start_time, end_time, title, description, key_concepts)? If it uses the old schema (quiz, glossary, qa_pairs), reject.
+5. **Audit logging** — does the plan mention `write_audit_log()` for every sensitive operation?
+6. **Soft-delete** — does the plan use hard DELETE anywhere? Challenge it.
+7. **Rate limiting** — does the plan add rate limits to public/semi-public endpoints?
+8. **Race conditions** — does the plan handle counters with `SELECT FOR UPDATE`?
+9. **Redis singleton** — does the plan use the shared Redis pool?
+10. **Test coverage** — does the plan list unhappy-path test cases?
+
+---
+
+## Docker
+
+```bash
+# Full clean restart (wipes DB + Redis):
+docker compose down
+docker volume rm yool-ai-plugin_postgres_data yool-ai-plugin_redis_data
+docker compose build <service>
+docker compose up -d
+
+# Partial rebuild (keeps data):
+docker compose build <service> && docker compose up -d <service>
+
+# Reload nginx config without restart:
+docker compose exec nginx nginx -s reload
+
+# Watch logs:
+docker compose logs -f <service>
+```
+
+Migrations run automatically on container startup via the migrations service.
+
+---
+
+## Running Tests
+
+```bash
+# Auth suite:
+python test_auth.py
+
+# Session service suite:
+python test_session.py
+
+# With custom base URL:
+python test_auth.py  --base-url https://myserver.com
+python test_session.py --base-url https://myserver.com
+```
+
+Always run `test_auth.py` after any change touching auth, shared models, or migrations.
+Always run `test_session.py` after any change to `services/session/`.

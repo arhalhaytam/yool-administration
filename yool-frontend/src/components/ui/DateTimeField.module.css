@@ -1,0 +1,477 @@
+.shell {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 38px;
+  padding: 0 36px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--bg) 55%, var(--surface-2));
+  border: 1px solid var(--border-2);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 4%, transparent);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  text-align: start;
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color var(--t-smooth),
+    background-color var(--t-smooth),
+    box-shadow var(--t-smooth),
+    transform var(--t-fast);
+}
+
+.trigger:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--border-2));
+  background: color-mix(in srgb, var(--surface-3) 50%, var(--surface-2));
+}
+
+.trigger:focus-visible,
+.open .trigger {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-2));
+  background: var(--surface);
+  box-shadow:
+    0 0 0 3px var(--accent-dim),
+    inset 0 1px 0 color-mix(in srgb, var(--text) 5%, transparent),
+    0 4px 20px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.open .trigger {
+  transform: translateY(-1px);
+}
+
+.trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.triggerPlaceholder {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.icon {
+  position: absolute;
+  inset-inline-start: 11px;
+  color: var(--muted);
+  pointer-events: none;
+  transition: color var(--t-smooth);
+}
+
+.iconRight {
+  inset-inline-start: auto;
+  inset-inline-end: 11px;
+  opacity: 0.75;
+}
+
+.open .icon,
+.trigger:focus-visible .icon {
+  color: var(--accent);
+}
+
+/* ─── Popover (portaled) ─────────────────────────────────────────── */
+.popover {
+  position: fixed;
+  z-index: 300;
+  width: min(420px, calc(100vw - 24px));
+  padding: 12px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.55),
+    0 0 0 1px color-mix(in srgb, var(--accent) 10%, var(--border)) inset;
+  animation: popIn 0.2s var(--ease-out) both;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pickerBody {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 400px) {
+  .pickerBody {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calendarPane {
+  padding: 10px 12px 8px;
+  background: var(--surface-2);
+}
+
+.timePane {
+  display: flex;
+  flex-direction: column;
+  min-width: 108px;
+  padding: 10px 10px 8px;
+  background: var(--surface);
+  border-inline-start: 1px solid var(--border);
+}
+
+@media (max-width: 400px) {
+  .timePane {
+    border-inline-start: none;
+    border-top: 1px solid var(--border);
+  }
+}
+
+.calHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.calTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.calTitleGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.titleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-2);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.titleBtn:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border-2));
+  background: var(--surface-3);
+}
+
+.titleBtnActive {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border-2));
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.titleBtnYear {
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5rem;
+  justify-content: center;
+}
+
+.headerSpacer {
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.navBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.navBtn:hover {
+  color: var(--text);
+  border-color: var(--border);
+  background: var(--surface-3);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.day {
+  aspect-ratio: 1;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-2);
+  font-size: 12.5px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background-color var(--t-fast), color var(--t-fast);
+}
+
+.day:hover:not(:disabled) {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.dayOutside {
+  color: var(--muted);
+  opacity: 0.55;
+}
+
+.dayToday:not(.daySelected) {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.daySelected {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.daySelected:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 88%, #fff);
+  color: #fff;
+}
+
+.day:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  min-height: 212px;
+  align-content: center;
+  padding: 4px 0 8px;
+}
+
+.monthCell {
+  padding: 10px 6px;
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.monthCell:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border-2));
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.monthCellActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.yearList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 212px;
+  max-height: 212px;
+  overflow-y: auto;
+  padding: 4px 2px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-2) transparent;
+}
+
+.yearOption {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--t-fast), color var(--t-fast);
+}
+
+.yearOption:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.yearOptionActive {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.timeLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.timeColumns {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.timeCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.timeColTitle {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.timeList {
+  flex: 1;
+  max-height: 168px;
+  overflow-y: auto;
+  padding: 2px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-2) transparent;
+}
+
+.timeOption {
+  display: block;
+  width: 100%;
+  padding: 6px 4px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--t-fast), color var(--t-fast);
+}
+
+.timeOption:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.timeOptionActive {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface-3));
+  color: var(--text);
+  font-weight: 600;
+}
+
+.popoverFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.footerBtn {
+  padding: 6px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.footerBtn:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.footerBtnPrimary {
+  background: var(--accent);
+  color: #fff;
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.footerBtnPrimary:hover {
+  background: var(--accent-h);
+  color: #fff;
+}
+
+.footerBtnGhost {
+  border-color: var(--border-2);
+}

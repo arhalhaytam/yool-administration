@@ -1,0 +1,619 @@
+.pageAlert {
+  margin-bottom: 20px;
+}
+
+/* ─── Alert strip ────────────────────────────────────────────────── */
+.alertStrip {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  animation: fadeUp 0.35s var(--ease-out) both;
+}
+
+.alertItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid;
+}
+.alertItem[data-variant="danger"] {
+  background: var(--danger-dim);
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+}
+.alertItem[data-variant="warning"] {
+  background: var(--warning-dim);
+  color: var(--warning);
+  border-color: color-mix(in srgb, var(--warning) 30%, transparent);
+}
+
+/* ─── Language distribution ──────────────────────────────────────── */
+.langChips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  animation: fadeUp 0.45s var(--ease-out) 280ms both;
+}
+
+.langIcon { color: var(--muted); flex-shrink: 0; }
+
+.langTitle {
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.langChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 3px 10px;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.langChip:hover { background: var(--surface-3); border-color: var(--border-2); }
+
+.langCount {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--surface-3);
+  border-radius: var(--r-full);
+  padding: 1px 6px;
+}
+
+/* ─── Stat cards ─────────────────────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: fadeUp 0.5s var(--ease-out) var(--stat-delay, 0ms) both;
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--t-smooth), background-color var(--t-smooth);
+}
+.statCard:hover {
+  background: var(--surface-2);
+  border-color: var(--border-2);
+}
+
+/* accent left bar — color provided via --accent-color CSS var */
+.statAccent {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent-color);
+  opacity: 0.85;
+}
+
+.statIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--accent-bg);
+  color: var(--accent-color);
+}
+.statBody { flex: 1; min-width: 0; }
+
+.statValue {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+  color: var(--accent-color);
+}
+.statSkeleton {
+  width: 40px;
+  height: 24px;
+  display: inline-block;
+  border-radius: var(--r-sm);
+}
+.statLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* ─── Chart card ─────────────────────────────────────────────────── */
+.chartCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.55s var(--ease-out) 120ms both;
+}
+.chartWrap  { height: 200px; }
+.chartSkeleton {
+  height: 200px;
+  border-radius: var(--r-md);
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+.chartSkeletonShort { height: 200px; }
+
+.chartTooltip {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-md);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-sans);
+}
+.chartTooltipLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: 2px;
+}
+.chartTooltipValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ─── Context chart ──────────────────────────────────────────────── */
+.contextBody {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.donutWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donutCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.donutPct {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--success);
+  line-height: 1;
+}
+.donutLabel {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-top: 4px;
+}
+
+.contextLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.contextStat {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.contextStatIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contextStatIcon[data-variant="success"] {
+  background: var(--success-dim);
+  color: var(--success);
+}
+.contextStatIcon[data-variant="danger"] {
+  background: var(--danger-dim);
+  color: var(--danger);
+}
+.contextStatValue {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.contextStatValue[data-variant="success"] { color: var(--success); }
+.contextStatValue[data-variant="danger"]  { color: var(--danger);  }
+.contextStatLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.contextStatPct {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.contextDivider {
+  height: 1px;
+  background: var(--border);
+}
+
+.contextBar {
+  height: 6px;
+  border-radius: var(--r-full);
+  background: var(--danger-dim);
+  overflow: hidden;
+  margin-top: 4px;
+}
+.contextBarFill {
+  height: 100%;
+  width: var(--bar-w, 0%);
+  background: var(--success);
+  border-radius: var(--r-full);
+  transition: width 0.8s var(--ease-out);
+}
+.contextBarLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.contextBarLabelIn  { color: var(--success); }
+.contextBarLabelOut { color: var(--danger);  }
+.contextSkeleton { padding: 16px 0; }
+
+/* ─── Skeleton helper ────────────────────────────────────────────── */
+.skeleton {
+  display: inline-block;
+  border-radius: var(--r-sm);
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+/* ─── Platform overview chips ───────────────────────────────────── */
+.overviewChips {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  animation: fadeUp 0.5s var(--ease-out) 320ms both;
+}
+
+.overviewChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 7px 14px;
+  font-size: 13px;
+  animation: fadeUp 0.45s var(--ease-out) var(--chip-delay, 0ms) both;
+  transition: border-color var(--t-smooth), background var(--t-smooth);
+}
+.overviewChip:hover {
+  border-color: var(--border-2);
+  background: var(--surface-2);
+}
+
+.overviewChipIcon {
+  color: var(--chip-color, var(--muted));
+  flex-shrink: 0;
+}
+
+.overviewChipValue {
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: -0.02em;
+  color: var(--chip-color, var(--text));
+}
+
+.chipSkeleton {
+  display: inline-block;
+  width: 36px;
+  height: 14px;
+  border-radius: var(--r-sm);
+}
+
+.overviewChipLabel {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ─── 2-column charts row (outcomes + adherence) ─────────────────── */
+.chartsRow3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.chartsRow3 > .chartCard { margin-bottom: 0; }
+
+/* ─── Session outcomes donut ─────────────────────────────────────── */
+.outcomeBody {
+  padding: 8px 0 0;
+}
+
+.outcomeLegend {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.outcomeLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  padding: 0 4px;
+}
+
+.outcomeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--muted));
+  flex-shrink: 0;
+}
+
+.outcomeName {
+  flex: 1;
+  color: var(--text-2);
+  font-weight: 450;
+}
+
+.outcomeCount {
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+  text-align: end;
+}
+
+.outcomePct {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  min-width: 34px;
+  text-align: end;
+}
+
+/* ─── Language breakdown bars ────────────────────────────────────── */
+.langBars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 10px 0 6px;
+}
+
+.langBarItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  animation: fadeUp 0.4s var(--ease-out) var(--lang-delay, 0ms) both;
+}
+
+.langBarCode {
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  width: 28px;
+  flex-shrink: 0;
+  text-align: start;
+}
+
+.langBarTrack {
+  flex: 1;
+  height: 7px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.langBarFill {
+  height: 100%;
+  width: var(--lang-w, 0%);
+  border-radius: var(--r-full);
+  background: var(--bar-color, var(--accent));
+  transition: width 0.9s var(--ease-out) var(--lang-delay, 0ms);
+}
+
+.langBarPct {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text);
+  min-width: 36px;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.langBarCount {
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 28px;
+  text-align: end;
+}
+
+/* ─── Teacher leaderboard ────────────────────────────────────────── */
+.leaderboardWrap {
+  overflow-x: auto;
+  margin-top: 8px;
+}
+
+.leaderboard {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.leaderboard thead th {
+  text-align: start;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  padding: 0 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.leaderboard tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t-fast);
+}
+.leaderboard tbody tr:last-child { border-bottom: none; }
+.leaderboard tbody tr:hover { background: var(--surface-2); }
+
+.leaderboard tbody td {
+  padding: 10px 8px;
+  vertical-align: middle;
+}
+
+.leaderboardRank {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  width: 36px;
+  min-width: 36px;
+  text-align: center;
+  padding-inline-end: 4px;
+}
+
+.leaderboardName {
+  font-weight: 500;
+  color: var(--text);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboardNum {
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 52px;
+  width: 52px;
+}
+
+/* Align the header over the centered cell values */
+.leaderboard th.leaderboardNum { text-align: center; }
+
+.leaderboard td.leaderboardNum[data-good="true"] { color: var(--success); }
+.leaderboard td.leaderboardNum[data-bad="true"]  { color: var(--danger);  }
+
+.leaderboardBar {
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.leaderboard th.leaderboardBar { text-align: start; }
+.leaderboard td.leaderboardBar { padding-inline-end: 4px; }
+
+.leaderboardBarTrack {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.leaderboardBarFill {
+  height: 100%;
+  width: var(--row-w, 0%);
+  background: var(--row-color, var(--success));
+  border-radius: var(--r-full);
+  transition: width 0.6s var(--ease-out);
+}
+
+.leaderboardPct {
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 34px;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  color: var(--row-color, var(--success));
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .chartsRow3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 1024px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .contextBody {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .donutWrap { max-width: 220px; margin: 0 auto; }
+  .overviewChips { gap: 8px; }
+}
+@media (max-width: 480px) {
+  .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .statCard { padding: 14px; gap: 12px; }
+  .statValue { font-size: 22px; }
+  .statIcon  { width: 34px; height: 34px; }
+  .chartCard { padding: 16px; }
+  .overviewChip { padding: 6px 12px; }
+}
+@media (max-width: 380px) {
+  .stats { grid-template-columns: 1fr; }
+}

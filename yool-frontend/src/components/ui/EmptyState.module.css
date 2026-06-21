@@ -1,0 +1,41 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 32px;
+  text-align: center;
+  animation: fadeUp 0.3s var(--ease-out) both;
+}
+
+.iconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  letter-spacing: -0.005em;
+}
+
+.description {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+.action {
+  margin-top: 20px;
+}

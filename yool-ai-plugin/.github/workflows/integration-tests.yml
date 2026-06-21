@@ -1,0 +1,42 @@
+name: Integration tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bootstrap secrets, TLS, and .env
+        run: bash scripts/ci_bootstrap.sh
+
+      - name: Build and start stack (CI STT stub)
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d --build
+
+      - name: Wait for HTTPS gateway
+        run: |
+          set -e
+          for i in $(seq 1 90); do
+            if curl -skf "https://localhost/health" >/dev/null; then
+              echo "gateway healthy"
+              exit 0
+            fi
+            echo "waiting for gateway ($i/90)..."
+            sleep 2
+          done
+          echo "timeout"
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml ps
+          exit 1
+
+      - name: Run integration test scripts
+        run: bash scripts/run_all_tests.sh https://localhost
+
+      - name: Service logs on failure
+        if: failure()
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml logs --tail=300

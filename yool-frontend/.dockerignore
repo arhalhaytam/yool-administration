@@ -1,0 +1,31 @@
+# Dependencies & build artifacts (copied selectively in Dockerfile stages)
+node_modules
+.next
+out
+
+# Environment files — never bake secrets into the image
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Editor / OS
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript build info (regenerated during build)
+tsconfig.tsbuildinfo
+
+# Docs / CI
+README.md
+AGENTS.md
+CLAUDE.md

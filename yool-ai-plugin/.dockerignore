@@ -1,0 +1,45 @@
+# ── Version control ──────────────────────────────────────────────────────────
+.git
+.gitignore
+
+# ── Secrets & environment (never bake into images) ───────────────────────────
+.env
+*.env
+secrets/
+*.pem
+
+# ── Python artifacts ─────────────────────────────────────────────────────────
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/*.egg-info
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/.venv
+**/venv
+
+# ── Node / frontend ───────────────────────────────────────────────────────────
+frontend/node_modules
+frontend/.next
+frontend/out
+
+# ── Model cache (large — never in build context) ─────────────────────────────
+**/.cache
+**/*.bin
+**/*.safetensors
+**/*.gguf
+**/*.onnx
+
+# ── Docker artifacts ──────────────────────────────────────────────────────────
+**/*.log
+postgres_data
+redis_data
+
+# ── IDE & OS ──────────────────────────────────────────────────────────────────
+.vscode
+.idea
+**/*.swp
+.DS_Store
+Thumbs.db

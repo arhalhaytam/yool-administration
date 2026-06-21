@@ -1,0 +1,5 @@
+# AI pipeline — heavy libs installed in separate layers for cache granularity
+# torch CPU-only wheel (~270MB vs ~2.8GB CUDA default on PyPI)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.3.0+cpu
+torchaudio==2.3.0+cpu

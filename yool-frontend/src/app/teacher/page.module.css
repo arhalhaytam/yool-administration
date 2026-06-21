@@ -1,0 +1,664 @@
+.pageAlert {
+  margin-bottom: 16px;
+}
+
+/* ─── Live session banner ────────────────────────────────────────── */
+.liveBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  border: 1.5px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  text-decoration: none;
+  color: inherit;
+  animation: fadeUp 0.3s var(--ease-out) both;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.liveBanner:hover {
+  background: color-mix(in srgb, var(--danger) 15%, var(--surface));
+  border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+}
+
+.liveBannerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--danger);
+  flex-wrap: wrap;
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  flex-shrink: 0;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.liveTitle {
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+.liveBannerBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--danger);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ─── Empty course nudge ─────────────────────────────────────────── */
+.cardEmpty {
+  border-style: dashed !important;
+  border-color: var(--border-2) !important;
+  background: var(--surface-2) !important;
+}
+.cardEmpty:hover {
+  border-color: var(--accent) !important;
+  background: var(--accent-dim) !important;
+}
+
+.noSessionsHint {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ─── KPI grid (2 × 4) ───────────────────────────────────────────── */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+@media (max-width: 1024px) { .kpiGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px)  { .kpiGrid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+
+.kpiCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUp 0.45s var(--ease-out) var(--kpi-delay, 0ms) both;
+  transition: border-color var(--t-smooth), background var(--t-smooth);
+  position: relative;
+  overflow: hidden;
+}
+.kpiCard:hover {
+  border-color: var(--border-2);
+  background: var(--surface-2);
+}
+
+/* Subtle pulsing left accent for the live-now card */
+.kpiCardLive {
+  border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+}
+.kpiCardLive::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background: var(--danger);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* ─── Chip row ───────────────────────────────────────────────────── */
+.chipRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  animation: fadeUp 0.45s var(--ease-out) 380ms both;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 6px 14px;
+  font-size: 12.5px;
+  animation: fadeUp 0.4s var(--ease-out) var(--chip-delay, 0ms) both;
+  transition: border-color var(--t-smooth), background var(--t-smooth);
+}
+.chip:hover { border-color: var(--border-2); background: var(--surface-2); }
+
+.chipIcon { color: var(--chip-color, var(--muted)); flex-shrink: 0; }
+.chipValue { font-weight: 700; font-size: 13px; letter-spacing: -0.02em; color: var(--chip-color, var(--text)); }
+.chipLabel { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+
+.chipSkeleton {
+  display: inline-block;
+  width: 28px;
+  height: 13px;
+  border-radius: var(--r-sm);
+}
+
+.skeleton {
+  display: inline-block;
+  border-radius: var(--r-sm);
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.kpiIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--kpi-bg);
+  color: var(--kpi-color);
+}
+
+.kpiBody { flex: 1; min-width: 0; }
+
+.kpiValue {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 3px;
+  color: var(--kpi-color);
+}
+
+.kpiSkeleton {
+  display: inline-block;
+  width: 36px;
+  height: 18px;
+  border-radius: var(--r-sm);
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.kpiLabel {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Charts row (trend + outcomes, 2 col) ───────────────────────── */
+.chartsRow {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.chartsRow > .chartCard { margin-bottom: 0; }
+@media (max-width: 900px) { .chartsRow { grid-template-columns: 1fr; } }
+
+/* ─── Chart card ─────────────────────────────────────────────────── */
+.chartCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.5s var(--ease-out) 200ms both;
+}
+
+.chartWrap { margin-top: 12px; }
+
+.chartSkeleton {
+  width: 100%;
+  height: 220px;
+  border-radius: var(--r-md);
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.chartSkeletonShort { height: 200px; }
+.contextSkeleton { padding: 16px 0; }
+
+/* ─── Donut chart ────────────────────────────────────────────────── */
+.donutWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donutCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.donutPct {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  line-height: 1;
+}
+
+.donutLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-top: 3px;
+}
+
+/* ─── Outcome legend ─────────────────────────────────────────────── */
+.outcomeBody { padding: 8px 0 0; }
+
+.outcomeLegend {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.outcomeLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  padding: 0 4px;
+}
+
+.outcomeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--muted));
+  flex-shrink: 0;
+}
+
+.outcomeName  { flex: 1; color: var(--text-2); font-weight: 450; }
+.outcomeCount { font-weight: 700; color: var(--text); min-width: 28px; text-align: end; font-variant-numeric: tabular-nums; }
+.outcomePct   { font-size: 11px; font-weight: 500; color: var(--muted); min-width: 34px; text-align: end; }
+
+/* ─── Adherence / context body (donut + legend side by side) ──────── */
+.contextBody {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+  align-items: center;
+  padding: 8px 0 4px;
+}
+@media (max-width: 680px) {
+  .contextBody { grid-template-columns: 1fr; gap: 16px; }
+  .donutWrap   { max-width: 240px; margin: 0 auto; }
+}
+
+.contextLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contextStat {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.contextStatIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contextStatIcon[data-variant="success"] {
+  background: var(--success-dim);
+  color: var(--success);
+}
+.contextStatIcon[data-variant="danger"] {
+  background: var(--danger-dim);
+  color: var(--danger);
+}
+
+.contextStatValue {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.contextStatValue[data-variant="success"] { color: var(--success); }
+.contextStatValue[data-variant="danger"]  { color: var(--danger);  }
+
+.contextStatLabel {
+  font-size: 12.5px;
+  color: var(--text-2);
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+.contextStatPct {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.contextDivider {
+  height: 1px;
+  background: var(--border);
+  margin: 2px 0;
+}
+
+.contextBar {
+  height: 8px;
+  border-radius: var(--r-full);
+  background: var(--danger-dim);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.contextBarFill {
+  height: 100%;
+  width: var(--bar-w, 0%);
+  background: var(--success);
+  border-radius: var(--r-full);
+  transition: width 1s var(--ease-out);
+}
+
+.contextBarLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.contextBarLabelIn  { font-size: 11px; font-weight: 600; color: var(--success); }
+.contextBarLabelOut { font-size: 11px; font-weight: 600; color: var(--danger);  }
+
+/* ─── Chart tooltip ──────────────────────────────────────────────── */
+.chartTooltip {
+  background: color-mix(in srgb, var(--surface) 95%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-md);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-sans);
+}
+.chartTooltipLabel { font-size: 11px; font-weight: 500; color: var(--text-2); margin-bottom: 2px; }
+.chartTooltipValue { font-size: 13px; font-weight: 600; color: var(--text); }
+
+/* ─── Recent sessions card ───────────────────────────────────────── */
+.recentCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 28px;
+  overflow: hidden;
+  animation: fadeUp 0.5s var(--ease-out) 250ms both;
+}
+
+.recentHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+  gap: 12px;
+}
+
+.recentViewAll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  margin-top: 6px;
+  text-decoration: none;
+  transition: opacity var(--t-fast);
+}
+.recentViewAll:hover { opacity: 0.75; }
+
+.recentList {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0 0;
+}
+
+.recentRow {
+  border-top: 1px solid var(--border);
+}
+.recentRow:first-child { border-top: none; }
+
+.recentLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  text-decoration: none;
+  transition: background var(--t-fast);
+}
+.recentLink:hover { background: var(--surface-2); }
+
+.recentTitle {
+  flex: 1;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.recentDate {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.recentArrow {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.recentSkeletons { padding: 12px 20px; }
+.recentSkRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  gap: 12px;
+}
+.recentSkRow:first-child { border-top: none; }
+.skTitle  { width: 55%; height: 12px; display: inline-block; }
+.skStatus { width: 70px; height: 20px; border-radius: var(--r-full); display: inline-block; }
+
+.recentEmpty { padding: 0 0 8px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 840px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.4s var(--ease-out) both;
+  transition: border-color var(--t-smooth), background-color var(--t-smooth);
+}
+.card:hover {
+  border-color: var(--border-2);
+  background: var(--surface-2);
+}
+
+.cardDly0 { animation-delay: 0ms; }
+.cardDly1 { animation-delay: 70ms; }
+.cardDly2 { animation-delay: 140ms; }
+.cardDly3 { animation-delay: 210ms; }
+.cardDly4 { animation-delay: 280ms; }
+.cardDly5 { animation-delay: 350ms; }
+.cardDly6 { animation-delay: 420ms; }
+.cardDly7 { animation-delay: 490ms; }
+.cardDly8 { animation-delay: 560ms; }
+.cardDly9 { animation-delay: 630ms; }
+.cardDly10 { animation-delay: 700ms; }
+
+.cardHeader {
+  padding: 22px 22px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.courseTitle {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--heading);
+  margin: 0;
+}
+
+.badgeWrap {
+  align-self: flex-start;
+}
+
+.cardBody {
+  padding: 0 22px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.metaLabel {
+  color: var(--muted);
+  font-weight: 450;
+}
+
+.metaValue {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.cardFooter {
+  padding: 14px 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.arrowRtl {
+  display: inline-flex;
+  transform: rotate(180deg);
+}
+
+@media (max-width: 640px) {
+  .kpiStrip { gap: 10px; }
+  .kpiCard  { min-width: 100px; padding: 12px; gap: 10px; }
+  .kpiValue { font-size: 18px; }
+  .kpiIcon  { width: 30px; height: 30px; }
+}
+@media (max-width: 480px) {
+  .grid { gap: 14px; }
+  .cardHeader { padding: 18px 18px 12px; }
+  .cardBody   { padding: 0 18px 18px; }
+  .cardFooter { padding: 12px 18px; }
+  .courseTitle { font-size: 17px; }
+  .recentLink { padding: 10px 16px; }
+  .recentCard { margin-bottom: 20px; }
+}
+
+.skeletonCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeUp 0.3s ease both;
+}
+.skDly0 { animation-delay: 0ms; }
+.skDly1 { animation-delay: 70ms; }
+.skDly2 { animation-delay: 140ms; }
+.s1 { width: 35%; height: 10px; display: block; }
+.s2 { width: 70%; height: 16px; display: block; }
+.s3 { width: 62%; height: 10px; display: block; }
+.s4 {
+  width: 100%;
+  height: 38px;
+  display: block;
+  border-radius: var(--r-md);
+  margin-top: 8px;
+}
+
+.emptyWrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}

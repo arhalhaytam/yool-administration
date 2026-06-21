@@ -1,0 +1,109 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SectionHeader — minimalist heading for cards and panels.
+   Pure typography. No glowing dots, no gradient rails, no shadows —
+   the heading earns its visual weight from hierarchy alone.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  animation: sectionHeaderIn 0.32s var(--ease-out) both;
+}
+
+@keyframes sectionHeaderIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Inside cards / above tables */
+.inline {
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+/* Standalone block */
+.panel {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.left {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Title row — uppercase eyebrow with a thin accent rail. */
+.title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Slim accent rail — replaces the old glowing dot.
+   Static, single-pixel, no animation. */
+.accentDot {
+  flex-shrink: 0;
+  align-self: center;
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.85;
+}
+
+.titleText {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  color: var(--heading-section);
+}
+
+.subtitle {
+  margin: 4px 0 0 13px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: center;
+}
+
+/* ─── Danger variant — same shape, warmer color ─────────────────── */
+.danger .accentDot {
+  background: var(--danger);
+}
+
+.danger .titleText {
+  color: var(--danger);
+}
+
+.danger.panel {
+  background: var(--danger-dim);
+  border-color: color-mix(in srgb, var(--danger) 30%, var(--border));
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .action {
+    align-self: flex-start;
+  }
+}

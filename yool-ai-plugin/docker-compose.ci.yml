@@ -1,0 +1,21 @@
+# Use with: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d --build
+# Replaces the real STT image (heavy ML build) with a tiny HTTP stub so CI and quick
+# regression runs finish in minutes. Real STT / Whisper / pyannote tests use default compose only.
+
+services:
+  stt:
+    build:
+      context: ./ci/stt-stub
+      dockerfile: Dockerfile
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8003/health')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s

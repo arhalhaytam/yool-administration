@@ -1,0 +1,169 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ResponsiveTable — desktop <table> + mobile card list.
+   The breakpoint between the two layouts is 720 px; above this the
+   table view is shown, below it the cards.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.wrap {
+  width: 100%;
+  position: relative;
+}
+
+/* ─── Desktop / tablet table ──────────────────────────────────── */
+.tableScroll {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  /* Reserve room for the scrollbar so horizontal scroll never makes the
+     content shift on hover. */
+  scrollbar-gutter: stable;
+}
+@media (max-width: 720px) {
+  .tableScroll { display: none; }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  color: var(--text);
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: start;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.table tbody tr:last-child td { border-bottom: none; }
+
+.row {
+  animation: rowFadeIn 0.36s var(--ease-out) both;
+  transition: background-color var(--t-fast);
+}
+.row:hover { background: var(--surface-2); }
+
+.rowClickable { cursor: pointer; }
+.rowClickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+@keyframes rowFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.alignCenter { text-align: center; }
+.alignEnd    { text-align: end; }
+
+/* ─── Skeleton (loading) ──────────────────────────────────────── */
+.skeletonRow {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.skeletonBar {
+  display: block;
+  width: 92%;
+  height: 14px;
+  border-radius: var(--r-sm);
+}
+
+.skeletonCardBar {
+  display: block;
+  width: 100%;
+  height: 14px;
+  border-radius: var(--r-sm);
+}
+
+/* ─── Mobile card list ────────────────────────────────────────── */
+.cardList {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (max-width: 720px) {
+  .cardList { display: flex; }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: rowFadeIn 0.36s var(--ease-out) both;
+  transition: border-color var(--t-fast), background-color var(--t-fast);
+}
+.cardClickable {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.cardClickable:hover  { border-color: var(--border-2); background: var(--surface-2); }
+.cardClickable:active { background: var(--surface-3); }
+.cardClickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.fieldValue {
+  flex: 1;
+  min-width: 0;
+  text-align: end;
+  font-size: 13px;
+  color: var(--text);
+  /* Wrap long values rather than forcing horizontal scroll */
+  overflow-wrap: anywhere;
+}
+
+/* Primary field — name/title of the row, shown larger at the top */
+.fieldPrimary {
+  display: block;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.fieldPrimary .fieldValue {
+  text-align: start;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--heading);
+}

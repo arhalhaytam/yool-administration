@@ -1,0 +1,92 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: -0.01em;
+  transition: color var(--t-smooth);
+}
+
+.wrapper:focus-within .label {
+  color: var(--text);
+}
+
+.input {
+  width: 100%;
+  height: var(--control-h, 38px);
+  padding: 0 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 3%, transparent);
+  transition:
+    border-color var(--t-smooth),
+    background-color var(--t-smooth),
+    box-shadow var(--t-smooth),
+    transform var(--t-fast);
+}
+
+.input::placeholder {
+  color: var(--muted);
+  transition: color var(--t-fast);
+}
+
+.input:hover:not(:disabled):not(:focus) {
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--border-2));
+  background: color-mix(in srgb, var(--surface-3) 65%, var(--surface-2));
+}
+
+.input:focus {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-2));
+  background: var(--surface);
+  box-shadow:
+    0 0 0 3px var(--accent-dim),
+    inset 0 1px 0 color-mix(in srgb, var(--text) 4%, transparent);
+}
+
+.input:focus::placeholder {
+  color: color-mix(in srgb, var(--muted) 65%, transparent);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hasError {
+  border-color: color-mix(in srgb, var(--danger) 50%, var(--border-2));
+}
+
+.hasError:focus {
+  box-shadow: 0 0 0 3px var(--danger-dim);
+}
+
+.error {
+  font-size: 11.5px;
+  color: var(--danger);
+  animation: fieldMsgIn 0.25s var(--ease-out) both;
+}
+
+.hint {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+@keyframes fieldMsgIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

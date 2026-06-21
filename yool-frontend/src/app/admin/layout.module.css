@@ -1,0 +1,54 @@
+.layout {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  min-height: 100vh;
+  overflow-x: hidden;
+  min-width: 0;
+  position: relative;
+}
+
+/* Subtle content canvas — separates main workspace from sidebar. */
+/* P4: ambient tint is intentionally very faint. */
+.main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 45% at 75% 0%, rgba(91, 120, 255, 0.022), transparent 60%);
+  opacity: 1;
+}
+
+/* Keep page content centered on the viewport when the sidebar width changes */
+.contentAlign {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.content {
+  width: 100%;
+  max-width: 1100px;
+  padding: 32px 40px;
+  animation: uiContentIn var(--t-enter) var(--ease-out) both;
+}
+
+/* Tablet — slightly tighter padding */
+@media (max-width: 1024px) {
+  .content { padding: 28px 28px; }
+}
+/* Mobile (sidebar becomes drawer at this breakpoint — see Sidebar.module.css) */
+@media (max-width: 767.98px) {
+  .content { padding: 20px 16px; }
+}
+@media (max-width: 480px) {
+  .content { padding: 16px 14px; }
+}

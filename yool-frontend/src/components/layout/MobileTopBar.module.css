@@ -1,0 +1,83 @@
+/* MobileTopBar — visible only below the desktop sidebar breakpoint. */
+
+.bar {
+  display: none;
+  height: 56px;
+  padding: 0 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  /* Safe-area inset for notched devices in landscape (rare on phones, but cheap). */
+  padding-inline-start: max(14px, env(safe-area-inset-left));
+  padding-inline-end:   max(14px, env(safe-area-inset-right));
+}
+
+@media (max-width: 767.98px) {
+  .bar { display: flex; }
+}
+
+.menuBtn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background-color var(--t-fast),
+    border-color var(--t-fast),
+    color var(--t-fast);
+}
+.menuBtn:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border-2);
+}
+.menuBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.menuBtn:active { transform: scale(0.96); }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.brandMark {
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+}
+.brandWord {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--heading);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+.brandPeriod { color: var(--accent); }
+.brandRole {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-inline-start: auto;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}

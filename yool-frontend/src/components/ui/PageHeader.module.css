@@ -1,0 +1,138 @@
+/* ─── Breadcrumbs ──────────────────────────────────────────────── */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  font-family: var(--font-sans);
+  color: var(--text-2);
+  flex-wrap: wrap;
+}
+
+.breadcrumbItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.separator {
+  color: var(--border-2);
+  font-size: 11px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.link {
+  color: var(--text-2);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--t-fast);
+}
+.link:hover { color: var(--accent); }
+
+.current {
+  color: var(--muted);
+  font-weight: 400;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Header ───────────────────────────────────────────────────── */
+.header {
+  position: relative;
+  margin-bottom: 24px;
+  padding: 2px 0 0;
+  isolation: isolate;
+  animation: headerSlideDown 0.42s var(--ease-out) both;
+}
+
+@keyframes headerSlideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.titleBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Solid accent rail — replaces the pulsing glow strip */
+.accent {
+  flex-shrink: 0;
+  width: 3px;
+  height: 28px;
+  margin-top: 6px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  opacity: 0.95;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  display: inline-block;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--heading);
+}
+
+.subtitle {
+  margin-top: 6px;
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text-2);
+  max-width: 64ch;
+}
+
+.action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.divider {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+  height: 1px;
+  border: none;
+  background: var(--border);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .header { margin-bottom: 20px; }
+  .inner  { flex-direction: column; align-items: stretch; gap: 14px; }
+  .action { padding-top: 0; justify-content: flex-start; flex-wrap: wrap; }
+  .title  { font-size: 22px; }
+  .subtitle { font-size: 13px; max-width: none; }
+  .accent { height: 24px; margin-top: 4px; }
+  .divider { margin-top: 16px; }
+}
+@media (max-width: 380px) {
+  .title { font-size: 20px; }
+  .titleBlock { gap: 12px; }
+}

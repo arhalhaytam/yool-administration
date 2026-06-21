@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: -0.01em;
+  transition: color var(--t-smooth);
+}
+
+.wrapper:focus-within .label {
+  color: var(--text);
+}
+
+.error {
+  font-size: 11.5px;
+  color: var(--danger);
+}
+
+.hint {
+  font-size: 11.5px;
+  color: var(--muted);
+}

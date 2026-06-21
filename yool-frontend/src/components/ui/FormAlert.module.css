@@ -1,0 +1,43 @@
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  line-height: 1.45;
+  border: 1px solid transparent;
+  animation: fadeIn var(--t-enter) var(--ease-out) both;
+  transition:
+    opacity var(--t-smooth),
+    border-color var(--t-smooth),
+    background-color var(--t-smooth);
+}
+
+.error {
+  background: var(--danger-dim);
+  border-color: color-mix(in srgb, var(--danger) 35%, transparent);
+  color: color-mix(in srgb, var(--danger) 85%, var(--text));
+}
+
+.success {
+  background: var(--success-dim);
+  border-color: color-mix(in srgb, var(--success) 35%, transparent);
+  color: color-mix(in srgb, var(--success) 80%, var(--text));
+}
+
+.warning {
+  background: var(--warning-dim);
+  border-color: color-mix(in srgb, var(--warning) 35%, transparent);
+  color: color-mix(in srgb, var(--warning) 85%, var(--text));
+}
+
+.icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.message {
+  flex: 1;
+  min-width: 0;
+}
